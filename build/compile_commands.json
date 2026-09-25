@@ -1,8 +1,0 @@
-[
-{
-  "directory": "C:/Users/vukasin.cardaklija/Desktop/Firewall/build",
-  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe   -g -o CMakeFiles\\Firewall.dir\\packet-capturer\\src\\main.cpp.obj -c C:\\Users\\vukasin.cardaklija\\Desktop\\Firewall\\packet-capturer\\src\\main.cpp",
-  "file": "C:/Users/vukasin.cardaklija/Desktop/Firewall/packet-capturer/src/main.cpp",
-  "output": "CMakeFiles/Firewall.dir/packet-capturer/src/main.cpp.obj"
-}
-]

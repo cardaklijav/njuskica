@@ -1,3 +1,0 @@
-C:/Users/vukasin.cardaklija/Desktop/Firewall/build/CMakeFiles/Firewall.dir
-C:/Users/vukasin.cardaklija/Desktop/Firewall/build/CMakeFiles/edit_cache.dir
-C:/Users/vukasin.cardaklija/Desktop/Firewall/build/CMakeFiles/rebuild_cache.dir
