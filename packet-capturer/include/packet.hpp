@@ -1,37 +1,11 @@
-#include <cstdint>   // za uint64_t, uint16_t
-#include <cstddef>   // za size_t
-#include <string>    // za std::string
+#pragma once
+#include <cstdint>
+#include <vector>
+#include <chrono>
 
-enum class Protocol {
-    TCP,
-    UDP,
-    ICMP,
-    OTHER
-};
-
-struct TcpFlags {
-    bool syn;
-    bool ack;
-    bool fin;
-    bool rst;
-    bool psh;
-    bool urg;
-};
-
-struct Packet {
-    uint64_t timestamp;
-    size_t length;
-
-    std::string srcMac;
-    std::string dstMac;
-
-    std::string srcIp;
-    std::string dstIp;
-
-    Protocol protocol;
-
-    uint16_t srcPort;
-    uint16_t dstPort;
-
-    TcpFlags tcpFlags;
+struct RawPacket {
+    std::vector<uint8_t> data;                              // sirovi bajtovi, netaknuti
+    std::chrono::system_clock::time_point timestamp;        // kad je uhvaćen
+    uint32_t length;                                        // originalna dužina (može biti > data.size() ako je snaplen manji)
+    uint32_t captured_length;                               // koliko je stvarno uhvaćeno
 };

@@ -1,32 +1,51 @@
-#include <iostream>
-#include <pcap.h>
+#include "capture.hpp"
 
-void packet_handler(u_char *user_data, const struct pcap_pkthdr *pkthdr, const u_char *packet) {
-    std::cout << "Uhvacen paket! Duzina: " << pkthdr->len << " bajtova." << std::endl;
+#include <csignal>
+#include <iostream>
+
+namespace {
+PacketCapture* active_capture = nullptr;
+
+void handleSignal(int) {
+    if (active_capture != nullptr) {
+        active_capture->stop();
+    }
 }
 
-int main() {
-    char errbuf[PCAP_ERRBUF_SIZE];
-    
-    // Koristimo ime vašeg interfejsa koje ste dobili u ip a
-    const char *dev = "enp0s3"; 
+void printPacket(const RawPacket& packet) {
+    std::cout << "Uhvacen paket: " << packet.length
+              << " bajtova (" << packet.captured_length << " uhvaceno)\n";
+}
+} // namespace
 
-    std::cout << "Otvaram mrezni interfejs: " << dev << std::endl;
-
-    // Otvaranje mrežne kartice u Promiscuous modu
-    pcap_t *handle = pcap_open_live(dev, BUFSIZ, 1, 1000, errbuf);
-    if (handle == nullptr) {
-        std::cerr << "Ne mogu otvoriti mrezni interfejs " << dev << ": " << errbuf << std::endl;
+int main(int argc, char* argv[]) {
+    if (argc < 2 || argc > 3) {
+        std::cerr << "Upotreba: " << argv[0]
+                  << " <interfejs> [bpf-filter]\n";
         return 1;
     }
 
-    std::cout << "Slusam saobracaj na " << dev << "... (Pritisnite Ctrl+C za prekid)" << std::endl;
+    try {
+        PacketCapture capture(argv[1]);
+        capture.open();
 
-    // Uhvati 10 paketa i pozovi packet_handler za svaki
-    pcap_loop(handle, 10, packet_handler, nullptr);
+        if (argc == 3) {
+            capture.setFilter(argv[2]);
+        }
 
-    pcap_close(handle);
-    std::cout << "Zavrseno hvatanje paketa." << std::endl;
+        active_capture = &capture;
+        std::signal(SIGINT, handleSignal);
+
+        std::cout << "Slusam na interfejsu " << argv[1]
+                  << "... Pritisnite Ctrl+C za prekid.\n";
+        capture.start(printPacket);
+
+        active_capture = nullptr;
+        std::cout << "Hvatanje je zavrseno.\n";
+    } catch (const std::exception& error) {
+        std::cerr << "Greska: " << error.what() << '\n';
+        return 1;
+    }
 
     return 0;
 }

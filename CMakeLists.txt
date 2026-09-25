@@ -1,49 +1,51 @@
-cmake_minimum_required(VERSION 3.10)
-project(Njuskica CXX)
+#include "capture.hpp"
 
-# Postavljanje C++17 standarda
-set(CMAKE_CXX_STANDARD 17)
+#include <csignal>
+#include <iostream>
 
-# Pronalaženje libpcap biblioteke za hvatanje paketa
-find_library(PCAP_LIB pcap)
+namespace {
+PacketCapture* active_capture = nullptr;
 
-# 1. Putanja do vaših .hpp zaglavlja (u packet-capturer/include)
-include_directories(packet-capturer/include)
+void handleSignal(int) {
+    if (active_capture != nullptr) {
+        active_capture->stop();
+    }
+}
 
-# 2. Popis svih .cpp datoteka koje čine vaš glavni program
-add_executable(njuskica_capturer
-    packet-capturer/src/main.cpp
-    packet-capturer/src/capture.cpp
-    packet-capturer/src/ethernet.cpp
-    packet-capturer/src/ipv4.cpp
-    packet-capturer/src/tcp.cpp
-    packet-capturer/src/udp.cpp
-)
+void printPacket(const RawPacket& packet) {
+    std::cout << "Uhvacen paket: " << packet.length
+              << " bajtova (" << packet.captured_length << " uhvaceno)\n";
+}
+} // namespace
 
-# 3. Povezivanje izvršnog programa s libpcap bibliotekom
-target_link_libraries(njuskica_capturer ${PCAP_LIB})
+int main(int argc, char* argv[]) {
+    if (argc < 2 || argc > 3) {
+        std::cerr << "Upotreba: " << argv[0]
+                  << " <interfejs> [bpf-filter]\n";
+        return 1;
+    }
 
-# ==============================================================================
-# Opcionalno: Dodavanje jedinica za testiranje (iz packet-capturer/tests)
-# ==============================================================================
+    try {
+        PacketCapture capture(argv[1]);
+        capture.open();
 
-# Ethernet test
-add_executable(ethernet_test
-    packet-capturer/tests/ethernet_test.cpp
-    packet-capturer/src/ethernet.cpp
-)
-target_link_libraries(ethernet_test ${PCAP_LIB})
+        if (argc == 3) {
+            capture.setFilter(argv[2]);
+        }
 
-# IPv4 test
-add_executable(ipv4_test
-    packet-capturer/tests/ipv4_test.cpp
-    packet-capturer/src/ipv4.cpp
-)
-target_link_libraries(ipv4_test ${PCAP_LIB})
+        active_capture = &capture;
+        std::signal(SIGINT, handleSignal);
 
-# TCP test
-add_executable(tcp_test
-    packet-capturer/tests/tcp_test.cpp
-    packet-capturer/src/tcp.cpp
-)
-target_link_libraries(tcp_test ${PCAP_LIB})
+        std::cout << "Slusam na interfejsu " << argv[1]
+                  << "... Pritisnite Ctrl+C za prekid.\n";
+        capture.start(printPacket);
+
+        active_capture = nullptr;
+        std::cout << "Hvatanje je zavrseno.\n";
+    } catch (const std::exception& error) {
+        std::cerr << "Greska: " << error.what() << '\n';
+        return 1;
+    }
+
+    return 0;
+}
