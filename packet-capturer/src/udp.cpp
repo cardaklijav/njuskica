@@ -6,6 +6,8 @@ inline std::optional<UdpHeader> parse_udp(Bytes d) {
     h.src_port = be16(d, 0);
     h.dst_port = be16(d, 2);
     h.length = be16(d, 4);
+    h.checksum = be16(d, 6);
+    if (h.length > d.size()) return std::nullopt;
     if (h.length < 8) return std::nullopt;
 
     return h;

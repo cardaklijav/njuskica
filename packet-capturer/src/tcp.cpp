@@ -8,9 +8,11 @@ inline std::optional<TcpHeader> parse_tcp(Bytes d) {
     h.src_port = be16(d, 0);
     h.dst_port = be16(d, 2);
     h.seq = be32(d, 4);
-    h.ack = be32(d, 6);
+    h.ack = be32(d, 8);
     h.flags = d[13];
     h.window = be16(d, 14);
+    h.checksum = be16(d, 16);
+    h.urgent_pointer = be16(d, 18);
 
     return h;
 }

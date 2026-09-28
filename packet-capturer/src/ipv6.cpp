@@ -6,7 +6,8 @@ inline std::optional<IPv6Header> parse_ipv6(Bytes d) {
     const std::uint8_t version = d[0] >> 4;
     if(version != 6) return std::nullopt;
     IPv6Header h;
-    h.payload_length = be16(d, 4);
+    h.total_length = be16(d, 4);
+    if(h.total_length > d.size()) return std::nullopt;
     h.next_header = d[6];
     h.hop_limit = d[7];
     h.traffic_class = (b0 << 4) | (b1 >> 4);

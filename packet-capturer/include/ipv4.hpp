@@ -6,6 +6,7 @@ struct IPv4Header {
     std::uint16_t total_length = 0, frag_fields = 0;
     std::uint32_t src = 0, dst = 0;
     std::size_t header_len = 0;
+    Bytes payload;
 };
 
 std::optional<IPv4Header> parse_ipv4(Bytes d);
