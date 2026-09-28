@@ -12,10 +12,6 @@ void handleSignal(int) {
     }
 }
 
-void printPacket(const RawPacket& packet) {
-    std::cout << "Uhvacen paket: " << packet.length
-              << " bajtova (" << packet.captured_length << " uhvaceno)\n";
-}
 } // namespace
 
 int main(int argc, char* argv[]) {
@@ -38,7 +34,9 @@ int main(int argc, char* argv[]) {
 
         std::cout << "Slusam na interfejsu " << argv[1]
                   << "... Pritisnite Ctrl+C za prekid.\n";
-        capture.start(printPacket);
+        capture.start([](const RawPacket& packet) {
+            std::cout << packet << '\n';
+        });
 
         active_capture = nullptr;
         std::cout << "Hvatanje je zavrseno.\n";

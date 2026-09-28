@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <vector>
 #include <chrono>
+#include <iosfwd>
 
 struct RawPacket {
     std::vector<uint8_t> data;                              // sirovi bajtovi, netaknuti
@@ -9,3 +10,5 @@ struct RawPacket {
     uint32_t length;                                        // originalna dužina (može biti > data.size() ako je snaplen manji)
     uint32_t captured_length;                               // koliko je stvarno uhvaćeno
 };
+
+std::ostream& operator<<(std::ostream& output, const RawPacket& packet);

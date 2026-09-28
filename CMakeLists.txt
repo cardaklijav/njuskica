@@ -16,6 +16,7 @@ include_directories(packet-capturer/include)
 # 2. Popis svih .cpp datoteka koje čine vaš glavni program
 add_executable(njuskica_capturer
     packet-capturer/src/main.cpp
+    packet-capturer/src/packet.cpp
     packet-capturer/src/capture.cpp
     packet-capturer/src/ethernet.cpp
     packet-capturer/src/ipv4.cpp
