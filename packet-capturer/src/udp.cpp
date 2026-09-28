@@ -1,5 +1,6 @@
 #include "udp.hpp"
 #include <stdexcept>
+#include <ostream>
 
 UdpHeader parse_udp(Bytes d) {
     if(d.size() < 8) throw std::runtime_error("UDP header too short");
@@ -10,8 +11,15 @@ UdpHeader parse_udp(Bytes d) {
     if(h.length < 8 || h.length > d.size()) throw std::runtime_error("UDP length is invalid");
     h.payload = d.subspan(8, h.length - 8);
     h.checksum = be16(d, 6);
-    if (h.length > d.size()) throw std::runtime_error("UDP length exceeds data size");
-    if (h.length < 8) throw  std::runtime_error("UDP length is less than header size");
 
     return h;
+}
+
+std::ostream& operator<<(std::ostream& os, const UdpHeader& h) {
+    return os << "UDP{src_port=" << h.src_port
+              << ", dst_port=" << h.dst_port
+              << ", length=" << h.length
+              << ", checksum=" << h.checksum
+              << ", payload_size=" << h.payload.size()
+              << '}';
 }

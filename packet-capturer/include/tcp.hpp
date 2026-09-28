@@ -1,5 +1,6 @@
 #pragma once
 #include "bytes.hpp"
+#include <iosfwd>
 
 struct TcpHeader {
     std::uint16_t src_port = 0, dst_port = 0, checksum = 0, urgent_pointer = 0;
@@ -11,3 +12,4 @@ struct TcpHeader {
 };
 
 TcpHeader parse_tcp(Bytes d);
+std::ostream& operator<<(std::ostream& os, const TcpHeader& h);

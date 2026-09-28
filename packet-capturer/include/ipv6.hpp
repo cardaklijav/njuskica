@@ -1,5 +1,6 @@
 #pragma once
 #include "bytes.hpp"
+#include <iosfwd>
 
 struct IPv6Header {
     std::uint8_t traffic_class = 0;
@@ -14,3 +15,4 @@ struct IPv6Header {
 };
 
 IPv6Header parse_ipv6(Bytes d);
+std::ostream& operator<<(std::ostream& os, const IPv6Header& h);

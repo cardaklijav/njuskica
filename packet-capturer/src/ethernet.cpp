@@ -1,5 +1,6 @@
 #include "ethernet.hpp"
 #include <stdexcept>
+#include <ostream>
 
 EthernetHeader parse_ethernet(Bytes d) {
     if(d.size() < 14) throw std::runtime_error("Ethernet header too short");
@@ -17,4 +18,20 @@ EthernetHeader parse_ethernet(Bytes d) {
     h.payload = d.subspan(h.header_len);
     
     return h;
+}
+
+std::ostream& operator<<(std::ostream& os, const EthernetHeader& h) {
+    os << "Ethernet{src=";
+    for(int i = 0; i < 6; ++i) {
+        if(i > 0) os << ':';
+        os << std::hex << int(h.src[i]);
+    }
+    os << ", dst=";
+    for(int i = 0; i < 6; ++i) {
+        if(i > 0) os << ':';
+        os << std::hex << int(h.dst[i]);
+    }
+    return os << std::dec
+              << ", ether_type=" << std::hex << h.ether_type
+              << '}';
 }

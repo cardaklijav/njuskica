@@ -1,4 +1,5 @@
 #pragma once
+#include <iosfwd>
 #include "bytes.hpp"
 
 struct IPv4Header {
@@ -13,3 +14,4 @@ struct IPv4Header {
 };
 
 IPv4Header parse_ipv4(Bytes d);
+std::ostream& operator<<(std::ostream& os, const IPv4Header& h);

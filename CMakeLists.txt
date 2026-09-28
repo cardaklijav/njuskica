@@ -20,6 +20,7 @@ add_executable(njuskica_capturer
     packet-capturer/src/capture.cpp
     packet-capturer/src/ethernet.cpp
     packet-capturer/src/ipv4.cpp
+    packet-capturer/src/ipv6.cpp
     packet-capturer/src/tcp.cpp
     packet-capturer/src/udp.cpp
 )

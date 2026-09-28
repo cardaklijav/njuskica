@@ -1,5 +1,6 @@
 #include "tcp.hpp"
 #include <stdexcept>
+#include <ostream>
 
 TcpHeader parse_tcp(Bytes d) {
     if(d.size() < 20) throw std::runtime_error("TCP header too short");
@@ -17,4 +18,14 @@ TcpHeader parse_tcp(Bytes d) {
     h.payload = d.subspan(h.header_len);
 
     return h;
+}
+
+std::ostream& operator<<(std::ostream& os, const TcpHeader& h) {
+    return os << "TCP{src_port=" << h.src_port
+              << ", dst_port=" << h.dst_port
+              << ", seq=" << h.seq
+              << ", ack=" << h.ack
+              << ", flags=" << int(h.flags)
+              << ", window=" << h.window
+              << '}';
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "bytes.hpp"
+#include <iosfwd>
 
 struct EthernetHeader {
     std::array<std::uint8_t, 6> src{};
@@ -10,3 +11,4 @@ struct EthernetHeader {
 };
 
 EthernetHeader parse_ethernet (Bytes d);
+std::ostream& operator<<(std::ostream& os, const EthernetHeader& h);

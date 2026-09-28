@@ -1,4 +1,5 @@
 #pragma once
+#include <iosfwd>
 #include "bytes.hpp"
 
 struct UdpHeader {
@@ -8,3 +9,4 @@ struct UdpHeader {
 };
 
 UdpHeader parse_udp(Bytes d);
+std::ostream& operator<<(std::ostream& os, const UdpHeader& h);

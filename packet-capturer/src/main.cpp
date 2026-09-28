@@ -3,6 +3,11 @@
 #include <csignal>
 #include <iostream>
 
+// #include "bytes.hpp"
+// #include "ethernet.hpp"
+// #include "ipv4.hpp"
+// #include "ipv6.hpp"
+
 namespace {
 PacketCapture* active_capture = nullptr;
 
@@ -36,6 +41,18 @@ int main(int argc, char* argv[]) {
                   << "... Pritisnite Ctrl+C za prekid.\n";
         capture.start([](const RawPacket& packet) {
             std::cout << packet << '\n';
+            // try {
+            //     Bytes d{packet.data.data(), packet.data.size()};
+            //     EthernetHeader eth = parse_ethernet(d);
+            //     if(eth.ether_type == 0x0800) {
+            //         std::cout << parse_ipv4(eth.payload);
+            //     }
+            //     if(eth.ether_type == 0x86DD) {
+            //         std::cout << parse_ipv6(eth.payload);
+            //     }
+            // } catch (const std::exception& error) {
+            //     std::cerr << "Greska pri parsiranju paketa: " << error.what() << '\n';
+            // }
         });
 
         active_capture = nullptr;

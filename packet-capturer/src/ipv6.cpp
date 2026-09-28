@@ -1,5 +1,6 @@
 #include "ipv6.hpp"
 #include <stdexcept>
+#include <ostream>
 
 IPv6Header parse_ipv6(Bytes d) {
     if(d.size() < 40) throw std::runtime_error("IPv6 header is too short");
@@ -20,4 +21,24 @@ IPv6Header parse_ipv6(Bytes d) {
     }
 
     return h;
+}
+
+std::ostream& operator<<(std::ostream& os, const IPv6Header& h) {
+    os << '\n' <<"IPv6" << '\n' << "src=";
+    for(int i = 0; i < 16; ++i) {
+        if(i > 0) os << ':';
+        os << std::hex << int(h.src[i]);
+    }
+    os << '\n' <<", dst=";
+    for(int i = 0; i < 16; ++i) {
+        if(i > 0) os << ':';
+        os << std::hex << int(h.dst[i]);
+    }
+    return os << '\n' << std::dec
+              << "traffic_class=" << int(h.traffic_class)  << '\n'
+              << "flow_label=" << h.flow_label  << '\n'
+              << "total_length=" << h.total_length  << '\n'
+              << "next_header=" << int(h.next_header)  << '\n'
+              << "hop_limit=" << int(h.hop_limit)  << '\n'
+              << '\n';
 }
