@@ -13,4 +13,4 @@ struct IPv6Header {
     Bytes paylaod;
 };
 
-std::optional<IPv6Header> parse_ipv6(Bytes d);
+IPv6Header parse_ipv6(Bytes d);

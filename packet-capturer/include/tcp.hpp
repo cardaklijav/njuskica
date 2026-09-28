@@ -10,4 +10,4 @@ struct TcpHeader {
     Bytes payload;
 };
 
-std::optional<TcpHeader> parse_tcp(Bytes d);
+TcpHeader parse_tcp(Bytes d);

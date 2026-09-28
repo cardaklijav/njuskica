@@ -7,4 +7,4 @@ struct UdpHeader {
     Bytes payload;
 };
 
-std::optional<UdpHeader> parse_udp(Bytes d);
+UdpHeader parse_udp(Bytes d);

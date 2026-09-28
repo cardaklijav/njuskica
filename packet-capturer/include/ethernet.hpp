@@ -9,4 +9,4 @@ struct EthernetHeader {
     Bytes payload;
 };
 
-std::optional<EthernetHeader> parse_ethernet (Bytes d);
+EthernetHeader parse_ethernet (Bytes d);
