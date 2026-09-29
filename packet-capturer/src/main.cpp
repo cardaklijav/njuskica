@@ -1,5 +1,6 @@
 #include "capture.hpp"
 
+#include <variant>
 #include <csignal>
 #include <iostream>
 
@@ -10,6 +11,7 @@
 #include "ipv6.hpp"
 #include "tcp.hpp"
 #include "udp.hpp"
+#include "format.hpp"
 
 namespace {
 PacketCapture* active_capture = nullptr;
@@ -56,12 +58,15 @@ int main(int argc, char* argv[]) {
                     }
                     if(ip.protocol == 6) {
                         std::cout << '\n' << parse_tcp(ip.payload) << '\n';
+                        formatPacket(std::cout, ip, parse_tcp(ip.payload));
                     }
                     if(ip.protocol == 17) {
                         std::cout << '\n' << parse_udp(ip.payload) << '\n';
+                        formatPacket(std::cout, ip, parse_udp(ip.payload));
                     }
                     if(ip.protocol == 1) {
                         std::cout << '\n' << parse_icmp(ip.payload) << '\n';
+                        formatPacket(std::cout, ip, parse_icmp(ip.payload));
                     }
                 }
                 if(eth.ether_type == 0x86DD) {
@@ -70,12 +75,15 @@ int main(int argc, char* argv[]) {
                     // assuming there is nothing in between IPv6 and TCP/UDP, which is not always true
                     if(ip.next_header == 6) {
                         std::cout << parse_tcp(ip.payload) << '\n';
+                        formatPacket(std::cout, ip, parse_tcp(ip.payload));
                     }
                     if(ip.next_header == 17) {
                         std::cout << parse_udp(ip.payload) << '\n';
+                        formatPacket(std::cout, ip, parse_udp(ip.payload));
                     }
                     if(ip.next_header == 58) {
                         std::cout << parse_icmp(ip.payload) << '\n';
+                        formatPacket(std::cout, ip, parse_icmp(ip.payload));
                     }
                 }
             } catch (const std::exception& error) {
