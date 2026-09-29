@@ -16,10 +16,10 @@ UdpHeader parse_udp(Bytes d) {
 }
 
 std::ostream& operator<<(std::ostream& os, const UdpHeader& h) {
-    return os << "UDP{src_port=" << h.src_port
-              << ", dst_port=" << h.dst_port
-              << ", length=" << h.length
-              << ", checksum=" << h.checksum
-              << ", payload_size=" << h.payload.size()
-              << '}';
+    return os << "UDP" << '\n' << "src_port=" << h.src_port << '\n'
+              << "dst_port=" << h.dst_port << '\n'
+              << "length=" << h.length << '\n'
+              << "checksum=" << h.checksum << '\n'
+              << "payload_size=" << h.payload.size()
+              << '\n';
 }

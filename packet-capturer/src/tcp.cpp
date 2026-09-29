@@ -21,11 +21,11 @@ TcpHeader parse_tcp(Bytes d) {
 }
 
 std::ostream& operator<<(std::ostream& os, const TcpHeader& h) {
-    return os << "TCP{src_port=" << h.src_port
-              << ", dst_port=" << h.dst_port
-              << ", seq=" << h.seq
-              << ", ack=" << h.ack
-              << ", flags=" << int(h.flags)
-              << ", window=" << h.window
-              << '}';
+    return os << "TCP" << '\n' << "src_port=" << h.src_port << '\n'
+              << "dst_port=" << h.dst_port << '\n'
+              << "seq=" << h.seq << '\n' 
+              << "ack=" << h.ack << '\n'
+              << "flags=" << int(h.flags) << '\n'
+              << "window=" << h.window
+              << '\n';
 }

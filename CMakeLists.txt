@@ -23,6 +23,8 @@ add_executable(njuskica_capturer
     packet-capturer/src/ipv6.cpp
     packet-capturer/src/tcp.cpp
     packet-capturer/src/udp.cpp
+    packet-capturer/include/icmp.hpp
+    packet-capturer/src/icmp.cpp
 )
 
 # 3. Povezivanje izvršnog programa s libpcap bibliotekom

@@ -1,6 +1,6 @@
 #pragma once
-#include "bytes.hpp"
 #include <iosfwd>
+#include "bytes.hpp"
 
 struct IPv6Header {
     std::uint8_t traffic_class = 0;
@@ -11,7 +11,7 @@ struct IPv6Header {
     std::array<std::uint8_t, 16> src{};
     std::array<std::uint8_t, 16> dst{};
     std::size_t header_len = 40;
-    Bytes paylaod;
+    Bytes payload;
 };
 
 IPv6Header parse_ipv6(Bytes d);

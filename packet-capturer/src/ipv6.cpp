@@ -10,7 +10,7 @@ IPv6Header parse_ipv6(Bytes d) {
     IPv6Header h;
     h.total_length = be16(d, 4);
     if(h.total_length > d.size() - 40) throw std::runtime_error("IPv6 payload length is too long");
-    h.paylaod = d.subspan(40, h.total_length);
+    h.payload = d.subspan(40, h.total_length);
     h.next_header = d[6];
     h.hop_limit = d[7];
     h.traffic_class = (b0 << 4) | (b1 >> 4);
