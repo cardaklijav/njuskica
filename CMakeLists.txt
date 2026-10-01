@@ -13,6 +13,9 @@ find_library(PCAP_LIB pcap)
 # 1. Putanja do vaših .hpp zaglavlja (u packet-capturer/include)
 include_directories(packet-capturer/include)
 
+enable_testing()
+find_package(GTest REQUIRED)
+
 # 2. Popis svih .cpp datoteka koje čine vaš glavni program
 add_executable(njuskica_capturer
     packet-capturer/src/main.cpp
@@ -29,6 +32,27 @@ add_executable(njuskica_capturer
 
 # 3. Povezivanje izvršnog programa s libpcap bibliotekom
 target_link_libraries(njuskica_capturer ${PCAP_LIB})
+
+add_executable(icmp_test
+    packet-capturer/tests/icmp_test.cpp
+    packet-capturer/src/icmp.cpp
+)
+target_link_libraries(icmp_test GTest::gtest GTest::gtest_main)
+add_test(NAME icmp_test COMMAND icmp_test)
+
+add_executable(udp_test
+    packet-capturer/tests/udp_test.cpp
+    packet-capturer/src/udp.cpp
+)
+target_link_libraries(udp_test PRIVATE GTest::gtest GTest::gtest_main)
+add_test(NAME udp_test COMMAND udp_test)
+
+add_executable(tcp_test
+    packet-capturer/tests/tcp_test.cpp
+    packet-capturer/src/tcp.cpp
+)
+target_link_libraries(tcp_test PRIVATE GTest::gtest GTest::gtest_main)
+add_test(NAME tcp_test COMMAND tcp_test)
 
 # ==============================================================================
 # Opcionalno: Dodavanje jedinica za testiranje (iz packet-capturer/tests)
